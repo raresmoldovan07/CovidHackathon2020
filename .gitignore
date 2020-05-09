@@ -31,3 +31,5 @@ build/
 .vscode/
 .idea/
 .mvn/
+
+*.png

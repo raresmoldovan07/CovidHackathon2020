@@ -10,19 +10,16 @@ import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 public class ImageProcessingServiceImpl implements ImageProcessingService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageProcessingServiceImpl.class);
 
-    private static final String PYTHON_COMMAND = "python";
-    private static final String SCRIPT_PATH = "./UpperCase.py";
-    private static final String TEXT = "text";
+    private static final String IMAGE_EXTENSION = "png";
 
     private Base64 base64;
     private Converter converter;
@@ -43,11 +40,11 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
 //            return null;
 //        }
 //        return new Image("text")
+        String imageFileName = String.format("%s.%s", UUID.randomUUID(), IMAGE_EXTENSION);
+        File outputfile = new File(imageFileName);
         BufferedImage bufferedImage = converter.convertBase64ToBufferedImage(image.getBase64Code());
-        File outputfile = new File("image.png");
-        ImageIO.write(bufferedImage, "png", outputfile);
-
-        bufferedImage = ImageIO.read(new File("image.png"));
+        ImageIO.write(bufferedImage, IMAGE_EXTENSION, outputfile);
+        bufferedImage = ImageIO.read(new File(imageFileName));
         String base64String = converter.convertBufferedImageToBase64(bufferedImage);
         image.setBase64Code(base64String);
         return image;
