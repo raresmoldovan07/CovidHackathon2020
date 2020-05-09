@@ -12,13 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
+import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
@@ -30,14 +34,12 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
     private static final String PATH = "path";
     private static final String PYTHON_SERVER_URI = "http://localhost:5000/process_image";
 
-    private Base64 base64;
     private RestTemplate restTemplate;
     private Converter converter;
 
     @Autowired
-    public ImageProcessingServiceImpl(Converter converter, Base64 base64, RestTemplate restTemplate) {
+    public ImageProcessingServiceImpl(Converter converter, RestTemplate restTemplate) {
         this.converter = converter;
-        this.base64 = base64;
         this.restTemplate = restTemplate;
     }
 
@@ -45,8 +47,20 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
     public Image processImage(Image image) throws IOException {
         LOGGER.info("Processing new image");
         String imagePath = saveImage(image);
-        String processedImageFileName = requestImageProcessing(imagePath);
-        return loadProcessedImage(processedImageFileName);
+        String processedImageFilePath = requestImageProcessing(imagePath);
+        Image processesdImage = loadProcessedImage(processedImageFilePath);
+        deleteFile(imagePath);
+        deleteFile(processedImageFilePath);
+        return processesdImage;
+    }
+
+    @Async
+    void deleteFile(String filePath) {
+        try {
+            Files.deleteIfExists(Paths.get(filePath));
+        } catch (IOException e) {
+            LOGGER.error("Failed to delete file with filePath {}", filePath);
+        }
     }
 
     private String saveImage(Image image) throws IOException {
