@@ -1,21 +1,21 @@
 package com.covid.hackathon.model;
 
 public class FormattedImage {
-    private String imagePath;
+    private String path;
 
     public FormattedImage(){
 
     }
 
-    public FormattedImage(String imagePath) {
-        this.imagePath = imagePath;
+    public FormattedImage(String path) {
+        this.path = path;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getPath() {
+        return path;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setPath(String path) {
+        this.path = path;
     }
 }

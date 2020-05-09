@@ -27,8 +27,8 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageProcessingServiceImpl.class);
 
     private static final String IMAGE_EXTENSION = "png";
-    private static final String IMAGE_PATH = "imagePath";
-    private static final String PYTHON_SERVER_URI = "http://localhost:8082/processImage";
+    private static final String PATH = "path";
+    private static final String PYTHON_SERVER_URI = "http://localhost:5000/process_image";
 
     private Base64 base64;
     private RestTemplate restTemplate;
@@ -76,16 +76,16 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
         return new Image(base64String);
     }
 
-    private String requestImageProcessing(String imagePath){
+    private String requestImageProcessing(String path){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        JSONObject path = new JSONObject();
-        path.put(IMAGE_PATH, imagePath);
-        HttpEntity<String> request =new HttpEntity<>(path.toString(), headers);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(PATH, path);
+        HttpEntity<String> request =new HttpEntity<>(jsonObject.toString(), headers);
         FormattedImage formattedImage = restTemplate.postForObject(PYTHON_SERVER_URI, request, FormattedImage.class);
         if (formattedImage == null) {
             throw new RuntimeException("Failed to receive formatted image");
         }
-        return formattedImage.getImagePath();
+        return formattedImage.getPath();
     }
 }
