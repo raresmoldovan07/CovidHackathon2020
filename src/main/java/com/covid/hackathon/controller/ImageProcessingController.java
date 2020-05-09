@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController()
 @RequestMapping("/image-processing")
 public class ImageProcessingController {
@@ -20,7 +22,7 @@ public class ImageProcessingController {
     }
 
     @PostMapping("/")
-    public Image processImage(@RequestBody Image image) {
+    public Image processImage(@RequestBody Image image) throws IOException {
         return imageProcessingService.processImage(image);
     }
 }
