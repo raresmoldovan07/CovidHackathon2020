@@ -1,6 +1,7 @@
 package com.covid.hackathon.business.util;
 
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
@@ -12,7 +13,12 @@ import java.io.IOException;
 @Component
 public class Converter {
 
-    private Base64 base64 = new Base64();
+    private Base64 base64;
+
+    @Autowired
+    public Converter(Base64 base64) {
+        this.base64 = base64;
+    }
 
     public BufferedImage convertBase64ToBufferedImage(String base64String) {
         byte[] imageByte = base64.decode(base64String);
