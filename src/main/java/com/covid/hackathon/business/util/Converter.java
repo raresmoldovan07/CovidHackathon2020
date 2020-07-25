@@ -20,8 +20,8 @@ public class Converter {
         this.base64 = base64;
     }
 
-    public BufferedImage convertBase64ToBufferedImage(String base64String) {
-        byte[] imageByte = base64.decode(base64String);
+    public BufferedImage convertBase64ImageToBufferedImage(String base64Image) {
+        byte[] imageByte = base64.decode(base64Image);
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(imageByte)) {
             return ImageIO.read(inputStream);
         } catch (IOException e) {
