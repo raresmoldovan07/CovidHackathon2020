@@ -1,26 +1,15 @@
 package com.covid.hackathon.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Image implements Serializable {
 
     private String base64Code;
-
-    public Image() {
-    }
-
-    public Image(String base64Code) {
-        this.base64Code = base64Code;
-    }
-
-    public String getBase64Code() {
-        return base64Code;
-    }
-
-    public void setBase64Code(String base64Code) {
-        this.base64Code = base64Code;
-    }
 }

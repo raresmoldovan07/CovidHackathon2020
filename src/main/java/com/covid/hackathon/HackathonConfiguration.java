@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableAsync
-public class AppComponents {
+public class HackathonConfiguration {
 
     @Bean
     public Base64 base64(){

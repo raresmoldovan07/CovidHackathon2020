@@ -5,7 +5,6 @@ import com.covid.hackathon.business.util.Converter;
 import com.covid.hackathon.model.FormattedImage;
 import com.covid.hackathon.model.Image;
 import net.minidev.json.JSONObject;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
-import javax.security.auth.login.LoginException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +65,7 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
         String imageFileName = String.format("%s.%s", UUID.randomUUID(), IMAGE_EXTENSION);
         LOGGER.info("Saving new image in {}", imageFileName);
         File outputfile = new File(imageFileName);
-        BufferedImage bufferedImage = converter.convertBase64ToBufferedImage(image.getBase64Code());
+        BufferedImage bufferedImage = converter.convertBase64ImageToBufferedImage(image.getBase64Code());
         try {
             ImageIO.write(bufferedImage, IMAGE_EXTENSION, outputfile);
             return imageFileName;
@@ -79,7 +77,7 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
 
     private Image loadProcessedImage(String imageFileName) throws IOException {
         LOGGER.info("Loading processed image from {}", imageFileName);
-        BufferedImage bufferedImage = null;
+        BufferedImage bufferedImage;
         try {
             bufferedImage = ImageIO.read(new File(imageFileName));
         } catch (IOException e) {
